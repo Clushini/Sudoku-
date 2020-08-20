@@ -21,6 +21,19 @@ class App extends Component {
 
     this.updateSquare = this.updateSquare.bind(this);
     this.isInRow = this.isInRow.bind(this);
+    this.isInBlock = this.isInBlock.bind(this);
+  }
+
+  isInBlock(block, value) {
+    let blockdata = this.state[`block${block}`];
+    let exists = false;
+    [...Array(blockdata.rowcount)].map((num, index) => {
+      let fixed = index + 1;
+      blockdata[`row${fixed}`].map(num => {
+        if (num == value) exists = true;
+      })
+    })
+    return exists;
   }
 
   isInRow(row, block, value) {
@@ -75,11 +88,13 @@ class App extends Component {
   updateSquare(block, row, column, value) {
     const rowcheck = this.isInRow(row, block, value);
     const colcheck = this.isInColumn(column, block, value);
+    const blockcheck = this.isInBlock(block, value);
 
     if (rowcheck) alert("check ur rows bro")
     if (colcheck) alert("check ur colums bro")
+    if (blockcheck) alert("check ur block bro")
     
-    if (!rowcheck && !colcheck) {
+    if (!rowcheck && !colcheck && !blockcheck) {
       let copystate = Object.assign({}, this.state);
       copystate[`block${block}`][`row${row}`][column] = value;
       this.setState(copystate);
